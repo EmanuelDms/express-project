@@ -1,13 +1,34 @@
-const { Router } = require('express');
-const { uuid } = require('uuidv4')
+import { Router } from 'express';
+import { uuid } from 'uuidv4';
 
 const routes = new Router();
 
 const products = [];
 
-routes.get('/', (req, res) => {
-  return res.json({ message: 'Tipo GET!' })
-})
+// list products
+routes.get('/products', (req, res) => {
+  const { test } = req.query;
+
+  console.log(test);
+
+  return res.json(products);
+});
+
+// Search a specific product
+routes.get('/:id', (req, res) => {
+  const { id } = req.params;
+
+  // search a product, otherwise returns -1
+  const productIndex = products.findIndex(product =>
+    product.id === id
+  )
+
+  if (productIndex === -1) return res.status(400)
+    .json({ error: 'Product does not found' })
+
+  product = products[productIndex];
+  return res.json(product)
+});
 
 // Create a product
 routes.post('/products', (req, res) => {
@@ -25,18 +46,48 @@ routes.post('/products', (req, res) => {
   products.push(product)
 
   return res.json(product)
-})
+});
 
 // Change product
 routes.put('/products/:id', (req, res) => {
   const { id } = req.params;
   const { name, description, price, category } = req.body;
 
-  return res.json({ message: 'Tipo PUT!' })
-})
+  // search a product, otherwise returns -1
+  const productIndex = products.findIndex(product =>
+    product.id === id
+  )
 
-routes.delete('/', (req, res) => {
-  return res.json({ message: 'Tipo DELETE!' })
-})
+  if (productIndex === -1) return res.status(400)
+    .json({ error: 'Product does not found' })
 
-module.exports = routes;
+  const product = {
+    id,
+    name,
+    description,
+    price,
+    category
+  }
+
+  products[productIndex] = product;
+
+  return res.json(product);
+});
+
+routes.delete('/products/:id', (req, res) => {
+  const { id } = req.params;
+
+  // search a product, otherwise returns -1
+  const productIndex = products.findIndex(product =>
+    product.id === id
+  )
+
+  if (productIndex === -1) return res.status(400)
+    .json({ error: 'Product does not found' })
+
+  products.splice(productIndex, 1);
+
+  return res.status(204).send();
+});
+
+export default routes;
