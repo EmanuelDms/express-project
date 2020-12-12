@@ -44,10 +44,6 @@ class CategoryController {
       }
     }
 
-    if (name === category.name) {
-      return res.status(400).json({ error: 'Category name is the same.' })
-    }
-
     category.name = name;
     await category.save();
 
