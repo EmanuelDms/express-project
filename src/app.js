@@ -10,4 +10,4 @@ app.use(express.json());
 // Usa as rotas
 app.use(routes);
 
-export default app; 
+export default app;
