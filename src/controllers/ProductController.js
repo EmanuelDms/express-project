@@ -4,7 +4,10 @@ import Product from "../models/Product";
 class ProductController {
   // Show all products
   async index(req, res) {
-    const products = await Product.find().populate('category');
+    const {offset=1, limit=2} = req.query;
+
+    const products = await Product
+    .paginate({}, {offset, limit, populate:'category'});
     return res.json(products);
   }
 
