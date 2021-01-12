@@ -31,10 +31,12 @@ class CategoryController {
 
     const category = await Category.findById(id);
 
+    // Retornar mensagem erro se o produto não for encontrado
     if (!category) {
       return res.status(400).json({ error: 'Category does not found.' })
     }
 
+    // Verifica se existe um nome e o nome a ser alterado já não existe
     if (name && (name !== category.name)) {
 
       const categoryExists = await Category.findOne({ name });
