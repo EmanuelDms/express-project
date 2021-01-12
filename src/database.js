@@ -6,10 +6,8 @@ class Database{
   }
 
   init(){
-    mongoose.set('useCreateIndex', true)
-
     mongoose.connect('mongodb://localhost/mydb',
-      { useNewUrlParser: true, useUnifiedTopology: true },
+      { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},
       console.log('MongoDB connected')
     );
   }
